@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gdsc_app_dev/notes.dart';
-import 'package:gdsc_app_dev/routes/routes.dart';
+import 'package:gdsc_app_dev/routes.dart';
 
 class NotesPage extends StatelessWidget {
   NotesPage({super.key});
@@ -80,18 +80,19 @@ class NotesPage extends StatelessWidget {
                   alignment: Alignment.bottomRight,
                   child: ElevatedButton(
                     onPressed: (){
-                      Tasks.addNote(
+                      Notes.addNote(
                         Notes(title: _titleController.text, 
                           content: _contentController.text, 
-                          date: date, type: "Note")
+                          date: date, type: "Note",
+                          id: Notes.getMaxid()+1)
                       );
 
                       Navigator.pushNamed(context, MyRoutes.homePageRoute);
                     },
-                    child: Text("Done", style: TextStyle(fontSize: size.width*0.04),),
                     style: ButtonStyle(
                       fixedSize: MaterialStateProperty.all(Size(size.width*0.3, size.height*0.02))
                     ),
+                    child: Text("Done", style: TextStyle(fontSize: size.width*0.04),),
                   ),
                 )
               ],

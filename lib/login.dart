@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gdsc_app_dev/routes/routes.dart';
+import 'package:gdsc_app_dev/routes.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

@@ -1,16 +1,21 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gdsc_app_dev/notesDetailPage.dart';
 import 'package:gdsc_app_dev/notes.dart';
-import 'package:gdsc_app_dev/routes/routes.dart';
+import 'package:gdsc_app_dev/routes.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    List<Tasks> notesList = Tasks.getNotesList();
+    List<Notes> notesList = Notes.getNotesList();
 
     return SafeArea(
       child: Scaffold(
@@ -32,10 +37,13 @@ class HomePage extends StatelessWidget {
                             fontSize: size.width * 0.09,
                             fontFamily: 'Poppins'),
                       )),
-                  Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                    size: size.width * 0.09,
+                  InkWell(
+                    onTap: () => Navigator.pushNamed(context, MyRoutes.loginPageRoute),
+                    child: Icon(
+                      Icons.logout_sharp,
+                      color: Colors.white,
+                      size: size.width * 0.09
+                    ),
                   )
                 ],
               ),
@@ -57,9 +65,9 @@ class HomePage extends StatelessWidget {
                                   borderRadius:
                                       BorderRadius.circular(size.width * 0.03)),
                               hintText: "Search Here..",
-                              hintStyle: TextStyle(
+                              hintStyle: const TextStyle(
                                   color: Color.fromARGB(255, 95, 94, 94))),
-                          style: TextStyle(color: Colors.white))),
+                          style: const TextStyle(color: Colors.white))),
                   Padding(
                     padding: EdgeInsets.all(size.width * 0.04),
                     child: Icon(
@@ -72,51 +80,72 @@ class HomePage extends StatelessWidget {
               ),
               Expanded(
                 child: ListView.builder(
-                    itemCount: Tasks.getListSize(),
-                    itemBuilder: (context, index) => Column(children: [
+                    itemCount: Notes.getListSize(),
+                    itemBuilder: (context, index) { 
+                      Notes currentNote = notesList[index]; 
+                      return Column(children: [
                           SizedBox(
                             height: size.height * 0.015,
                           ),
-                          Container(
-                            height: size.height * 0.08,
-                            decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 95, 94, 94),
-                                borderRadius: BorderRadius.all(
-                                    Radius.circular(size.width * 0.03))),
-                            child: Padding(
-                              padding: EdgeInsets.all(size.width * 0.02),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.circle,
-                                        color: (notesList[index].getType(
-                                                    notesList[index]) ==
-                                                'Note')
-                                            ? Color(0xFF7DB634)
-                                            : Color(0xFF873AB6),
-                                        size: size.width * 0.03,
-                                      ),
-                                      SizedBox(width: size.width * 0.02),
-                                      Text(
-                                        "${notesList[index].getDate(notesList[index]).day}/${notesList[index].getDate(notesList[index]).month}/${notesList[index].getDate(notesList[index]).year}",
-                                        style: TextStyle(color: Colors.white),
-                                      )
-                                    ],
-                                  ),
-                                  Text(
-                                      notesList[index]
-                                          .gettitle(notesList[index]),
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: size.width * 0.035)),
-                                ],
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => NotesDetailPage(initialNote: currentNote),
+                                ),
+                              );},
+                            child: Container(
+                              height: size.height * 0.08,
+                              decoration: BoxDecoration(
+                                  color: const Color.fromARGB(255, 95, 94, 94),
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(size.width * 0.03))),
+                              child: Padding(
+                                padding: EdgeInsets.all(size.width * 0.02),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.circle,
+                                          color: (notesList[index].getType(
+                                                      notesList[index]) ==
+                                                  'Note')
+                                              ? Color(0xFF7DB634)
+                                              : Color(0xFF873AB6),
+                                          size: size.width * 0.03,
+                                        ),
+                                        SizedBox(width: size.width * 0.02),
+                                        Text(
+                                          "${notesList[index].getDate(notesList[index]).day}/${notesList[index].getDate(notesList[index]).month}/${notesList[index].getDate(notesList[index]).year}",
+                                          style: TextStyle(color: Colors.white),
+                                        )
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                            notesList[index].getTitle(notesList[index]),
+                                            style: TextStyle(
+                                              color: Colors.white,fontSize: size.width * 0.035)),
+                                        InkWell(
+                                          child: Icon(Icons.delete),
+                                          onTap: () => setState(() {
+                                            Notes.removeItem(notesList[index]);
+                                          })
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ])),
+                        ]);
+                      }),
               ),
               Align(
                 alignment: Alignment.bottomRight,
