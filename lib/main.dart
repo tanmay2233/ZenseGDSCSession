@@ -29,9 +29,9 @@ class MainApp extends StatelessWidget {
               routes: {
                 MyRoutes.loginPageRoute: (context) => const LoginPage(),
                 MyRoutes.homePageRoute: (context) => const HomePage(),
-                MyRoutes.notesPageRoute:(context) => const NotesPage()
+                MyRoutes.notesPageRoute:(context) => NotesPage()
               },
-              initialRoute: MyRoutes.homePageRoute,
+              initialRoute: MyRoutes.loginPageRoute,
             );
         });
   }

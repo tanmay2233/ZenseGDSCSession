@@ -5,16 +5,16 @@ import 'package:gdsc_app_dev/notes.dart';
 import 'package:gdsc_app_dev/routes/routes.dart';
 
 class NotesPage extends StatelessWidget {
-  const NotesPage({super.key});
+  NotesPage({super.key});
+
+  TextEditingController _titleController = TextEditingController();
+  TextEditingController _contentController = TextEditingController();
+  DateTime date = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
 
     Size size = MediaQuery.of(context).size;
-    DateTime date = DateTime.now();
-
-    TextEditingController _titleController = TextEditingController();
-    TextEditingController _contentController = TextEditingController();
 
     return SafeArea(
       child: Scaffold(
@@ -81,10 +81,12 @@ class NotesPage extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: (){
                       Tasks.addNote(
-                        Notes(title: _titleController.toString(), 
-                          content: _contentController.toString(), 
-                          date: date.toString(), type: "Note")
+                        Notes(title: _titleController.text, 
+                          content: _contentController.text, 
+                          date: date, type: "Note")
                       );
+
+                      Navigator.pushNamed(context, MyRoutes.homePageRoute);
                     },
                     child: Text("Done", style: TextStyle(fontSize: size.width*0.04),),
                     style: ButtonStyle(
