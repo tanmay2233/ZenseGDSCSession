@@ -96,9 +96,9 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               );},
                             child: Container(
-                              height: size.height * 0.133,
+                              height: size.height * 0.1,
                               decoration: BoxDecoration(
-                                  color: const Color.fromARGB(255, 95, 94, 94),
+                                  color: const Color(0xFF1E1E1E),
                                   borderRadius: BorderRadius.all(
                                       Radius.circular(size.height * 0.03))),
                               child: Padding(
@@ -118,7 +118,9 @@ class _HomePageState extends State<HomePage> {
                                             style: TextStyle(
                                               color: Colors.white, fontSize: size.width * 0.035)),
                                         InkWell(
-                                          child: Icon(Icons.delete),
+                                          child: const Icon(
+                                            Icons.delete,
+                                            color:Colors.white),
                                           onTap: () => setState(() {
                                             Notes.removeItem(notesList[index]);
                                           })
