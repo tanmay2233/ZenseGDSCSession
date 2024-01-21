@@ -1,9 +1,11 @@
+// ignore_for_file: prefer_final_fields
+
 import 'package:flutter/material.dart';
 import 'package:gdsc_app_dev/notes.dart';
 import 'package:gdsc_app_dev/routes.dart';
 
 class NotesPage extends StatefulWidget {
-  NotesPage({Key? key}) : super(key: key);
+  const NotesPage({Key? key}) : super(key: key);
 
   @override
   _NotesPageState createState() => _NotesPageState();
@@ -74,9 +76,9 @@ class _NotesPageState extends State<NotesPage> {
                   decoration: const InputDecoration(
                       hintText: "Enter Content",
                       hintStyle: TextStyle(
-                          color: Color.fromARGB(255, 95, 94, 94)),
+                        color: Color.fromARGB(255, 95, 94, 94)),
                     ),
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Color(0xFFA9A9A9)),
 
                   onChanged: (value) {
                     _contentController.text = value;

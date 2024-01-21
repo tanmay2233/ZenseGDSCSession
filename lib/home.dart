@@ -96,7 +96,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               );},
                             child: Container(
-                              height: size.height * 0.121,
+                              height: size.height * 0.133,
                               decoration: BoxDecoration(
                                   color: const Color.fromARGB(255, 95, 94, 94),
                                   borderRadius: BorderRadius.all(
