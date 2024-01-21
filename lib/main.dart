@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gdsc_app_dev/home.dart';
 import 'package:gdsc_app_dev/login.dart';
-import 'package:gdsc_app_dev/notesDetailPage.dart';
 import 'package:gdsc_app_dev/notesPage.dart';
 import 'package:gdsc_app_dev/routes.dart';
+import 'package:gdsc_app_dev/signup.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,9 +30,9 @@ class MainApp extends StatelessWidget {
               routes: {
                 MyRoutes.loginPageRoute: (context) => const LoginPage(),
                 MyRoutes.homePageRoute: (context) => const HomePage(),
-                MyRoutes.notesPageRoute:(context) => NotesPage(),
-                // MyRoutes.notesDetailPageRoute:(context) => NotesDetailPage()
-              },
+                MyRoutes.notesPageRoute: (context) => NotesPage(),
+                MyRoutes.signUpPageRoute: (context) => const SignupPage()
+            },  
               initialRoute: MyRoutes.loginPageRoute,
             );
         });
