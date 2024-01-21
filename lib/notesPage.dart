@@ -51,15 +51,17 @@ class _NotesPageState extends State<NotesPage> {
                 SizedBox(height: size.height * 0.02),
                 TextFormField(
                   controller: _titleController,
-                  maxLines: 3,
+                  maxLines: 2,
                   decoration: InputDecoration(
                       hintText: "Enter Title",
-                      hintStyle: const TextStyle(
-                          color: Color.fromARGB(255, 95, 94, 94)),
-                      border: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.circular(size.width * 0.03))),
-                  style: const TextStyle(color: Colors.white),
+                      hintStyle: TextStyle(
+                          color: const Color.fromARGB(255, 95, 94, 94),
+                          fontSize: size.width*0.05
+                          ),
+                      ),
+                  style: TextStyle(color: Colors.white,
+                  fontSize: size.width * 0.05
+                  ),
                   onChanged: (value) {
                     // Save the entered text to the controller
                     _titleController.text = value;
@@ -69,16 +71,14 @@ class _NotesPageState extends State<NotesPage> {
                 TextFormField(
                   controller: _contentController,
                   maxLines: 20,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       hintText: "Enter Content",
-                      hintStyle: const TextStyle(
+                      hintStyle: TextStyle(
                           color: Color.fromARGB(255, 95, 94, 94)),
-                      border: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.circular(size.width * 0.03))),
+                    ),
                   style: const TextStyle(color: Colors.white),
+
                   onChanged: (value) {
-                    // Save the entered text to the controller
                     _contentController.text = value;
                   },
                 ),
