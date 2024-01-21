@@ -10,6 +10,8 @@ class NotesPage extends StatefulWidget {
 }
 
 class _NotesPageState extends State<NotesPage> {
+
+  //Dont place them in the build method
   TextEditingController _titleController = TextEditingController();
   TextEditingController _contentController = TextEditingController();
   DateTime date = DateTime.now();

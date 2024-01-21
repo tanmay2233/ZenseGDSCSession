@@ -96,33 +96,19 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               );},
                             child: Container(
-                              height: size.height * 0.08,
+                              height: size.height * 0.121,
                               decoration: BoxDecoration(
                                   color: const Color.fromARGB(255, 95, 94, 94),
                                   borderRadius: BorderRadius.all(
-                                      Radius.circular(size.width * 0.03))),
+                                      Radius.circular(size.height * 0.03))),
                               child: Padding(
-                                padding: EdgeInsets.all(size.width * 0.02),
+                                padding: EdgeInsets.all(size.height * 0.02),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          Icons.circle,
-                                          color: (notesList[index].getType(
-                                                      notesList[index]) ==
-                                                  'Note')
-                                              ? Color(0xFF7DB634)
-                                              : Color(0xFF873AB6),
-                                          size: size.width * 0.03,
-                                        ),
-                                        SizedBox(width: size.width * 0.02),
-                                        Text(
-                                          "${notesList[index].getDate(notesList[index]).day}/${notesList[index].getDate(notesList[index]).month}/${notesList[index].getDate(notesList[index]).year}",
-                                          style: TextStyle(color: Colors.white),
-                                        )
-                                      ],
+                                    Text(
+                                      "${notesList[index].getDate(notesList[index]).day}/${notesList[index].getDate(notesList[index]).month}/${notesList[index].getDate(notesList[index]).year}",
+                                      style: TextStyle(color: Colors.white),
                                     ),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -130,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                                         Text(
                                             notesList[index].getTitle(notesList[index]),
                                             style: TextStyle(
-                                              color: Colors.white,fontSize: size.width * 0.035)),
+                                              color: Colors.white, fontSize: size.width * 0.035)),
                                         InkWell(
                                           child: Icon(Icons.delete),
                                           onTap: () => setState(() {
