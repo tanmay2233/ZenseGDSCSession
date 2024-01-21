@@ -94,7 +94,6 @@ class _NotesPageState extends State<NotesPage> {
                           title: _titleController.text,
                           content: _contentController.text,
                           date: date,
-                          type: "Note",
                           id: Notes.getMaxid() + 1,
                         ),
                       );

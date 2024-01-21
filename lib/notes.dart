@@ -11,7 +11,6 @@ class Notes{
     required String title,
     required String content, 
     required DateTime date,
-    required String type,
     required int id
   })
 
@@ -21,7 +20,7 @@ class Notes{
     this._date = date;
     this._id = id;
   }
-  
+
   static List<Notes> _notesList = [];
 
   void updateNoteById(int targetId, String newTitle, String newContent, DateTime newDate) {
