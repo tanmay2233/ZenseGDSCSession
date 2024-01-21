@@ -97,7 +97,7 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                     alignment: Alignment.bottomRight,
                     child: ElevatedButton(
                       onPressed: () {
-                         if (_formKey.currentState!.validate()) {
+                        if (_formKey.currentState!.validate()) {
                           // Save changes back to the initialNote object
                           widget.initialNote.updateNoteById(
                             widget.initialNote.getid(widget.initialNote),

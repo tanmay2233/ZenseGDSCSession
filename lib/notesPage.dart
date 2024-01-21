@@ -1,19 +1,21 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:gdsc_app_dev/notes.dart';
 import 'package:gdsc_app_dev/routes.dart';
 
-class NotesPage extends StatelessWidget {
-  NotesPage({super.key});
+class NotesPage extends StatefulWidget {
+  NotesPage({Key? key}) : super(key: key);
 
+  @override
+  _NotesPageState createState() => _NotesPageState();
+}
+
+class _NotesPageState extends State<NotesPage> {
   TextEditingController _titleController = TextEditingController();
   TextEditingController _contentController = TextEditingController();
   DateTime date = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
-
     Size size = MediaQuery.of(context).size;
 
     return SafeArea(
@@ -21,82 +23,90 @@ class NotesPage extends StatelessWidget {
         backgroundColor: Colors.black,
         body: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.all(size.width*0.04),
+            padding: EdgeInsets.all(size.width * 0.04),
             child: Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("${date.day}/${date.month}/${date.year}", 
-                    style: TextStyle(
-                      fontSize: size.width*0.04,
-                      color: const Color.fromARGB(255, 95, 94, 94)),
+                    Text(
+                      "${date.day}/${date.month}/${date.year}",
+                      style: TextStyle(
+                          fontSize: size.width * 0.04,
+                          color: const Color.fromARGB(255, 95, 94, 94)),
                     ),
-                
                     InkWell(
-                      child: const Icon(Icons.close,
+                      child: const Icon(
+                        Icons.close,
                         color: Color.fromARGB(255, 95, 94, 94),
                       ),
-                              
                       onTap: () {
                         Navigator.pushNamed(context, MyRoutes.homePageRoute);
-                      }
+                      },
                     )
                   ],
                 ),
-                SizedBox(height: size.height*0.02),
-                
+                SizedBox(height: size.height * 0.02),
                 TextFormField(
                   controller: _titleController,
                   maxLines: 3,
                   decoration: InputDecoration(
-                    hintText: "Enter Title",
-                    hintStyle: const TextStyle(color: Color.fromARGB(255, 95, 94, 94)),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(size.width*0.03)
-                    )
-                  ),
-                  style: const TextStyle(color: Colors.white)
-                ),
-
-                SizedBox(height: size.height * 0.04),
-                
-                TextFormField(
-                  controller:  _contentController,
-                  maxLines: 20,
-                  decoration: InputDecoration(
-                      hintText: "Enter Content",
-                      hintStyle:
-                          const TextStyle(color: Color.fromARGB(255, 95, 94, 94)),
+                      hintText: "Enter Title",
+                      hintStyle: const TextStyle(
+                          color: Color.fromARGB(255, 95, 94, 94)),
                       border: OutlineInputBorder(
                           borderRadius:
                               BorderRadius.circular(size.width * 0.03))),
-                  style: const TextStyle(color: Colors.white)
+                  style: const TextStyle(color: Colors.white),
+                  onChanged: (value) {
+                    // Save the entered text to the controller
+                    _titleController.text = value;
+                  },
                 ),
-
-                SizedBox(height: size.height*0.02),
-
+                SizedBox(height: size.height * 0.04),
+                TextFormField(
+                  controller: _contentController,
+                  maxLines: 20,
+                  decoration: InputDecoration(
+                      hintText: "Enter Content",
+                      hintStyle: const TextStyle(
+                          color: Color.fromARGB(255, 95, 94, 94)),
+                      border: OutlineInputBorder(
+                          borderRadius:
+                              BorderRadius.circular(size.width * 0.03))),
+                  style: const TextStyle(color: Colors.white),
+                  onChanged: (value) {
+                    // Save the entered text to the controller
+                    _contentController.text = value;
+                  },
+                ),
+                SizedBox(height: size.height * 0.02),
                 Align(
                   alignment: Alignment.bottomRight,
                   child: ElevatedButton(
-                    onPressed: (){
+                    onPressed: () {
                       Notes.addNote(
-                        Notes(title: _titleController.text, 
-                          content: _contentController.text, 
-                          date: date, type: "Note",
-                          id: Notes.getMaxid()+1)
+                        Notes(
+                          title: _titleController.text,
+                          content: _contentController.text,
+                          date: date,
+                          type: "Note",
+                          id: Notes.getMaxid() + 1,
+                        ),
                       );
 
                       Navigator.pushNamed(context, MyRoutes.homePageRoute);
                     },
                     style: ButtonStyle(
-                      fixedSize: MaterialStateProperty.all(Size(size.width*0.3, size.height*0.02))
+                        fixedSize: MaterialStateProperty.all(
+                            Size(size.width * 0.3, size.height * 0.02))),
+                    child: Text(
+                      "Done",
+                      style: TextStyle(fontSize: size.width * 0.04),
                     ),
-                    child: Text("Done", style: TextStyle(fontSize: size.width*0.04),),
                   ),
                 )
               ],
-
             ),
           ),
         ),
