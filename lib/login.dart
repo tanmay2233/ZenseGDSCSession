@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gdsc_app_dev/routes.dart';
-import 'package:gdsc_app_dev/signup.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -146,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
                   borderRadius: BorderRadius.all(Radius.circular(12)))),
         ),
       ),
-       SizedBox(
+      SizedBox(
         height: ScreenUtil().setHeight(20),
       ),
     ],

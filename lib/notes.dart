@@ -1,9 +1,27 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 class Notes{
 
-  String _title = '', _content = '', _type = '';
+  String _title = '', _content = '';
   DateTime _date = DateTime.now();
   int _id = 0;
+
+
+
+  Notes({
+    required String title,
+    required String content, 
+    required DateTime date,
+    required String type,
+    required int id
+  })
+
+  {
+    this._title = title;
+    this._content = content;
+    this._date = date;
+    this._id = id;
+  }
+  
   static List<Notes> _notesList = [];
 
   void updateNoteById(int targetId, String newTitle, String newContent, DateTime newDate) {
@@ -19,8 +37,8 @@ class Notes{
 
   String getTitle(Notes task) => task._title;
   String getContent(Notes task) => task._content;
-
   int getid(Notes note) => note._id;
+  DateTime getDate(Notes note) => note._date;
 
   static void addNote(Notes noteObject){
     _notesList.add(noteObject);
@@ -39,23 +57,4 @@ class Notes{
   }
 
   static void removeItem(Notes note) => _notesList.remove(note);
-
-  String getType(Notes task) => task._type;
-  DateTime getDate(Notes task) => task._date;
-
-  Notes({
-    required String title,
-    required String content, 
-    required DateTime date,
-    required String type,
-    required int id
-  })
-
-  {
-    this._title = title;
-    this._content = content;
-    this._date = date;
-    this._type = type;
-    this._id = id;
-  }
 }
