@@ -12,9 +12,31 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String? username;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the user's name when the widget is created
+    getUserDisplayName();
+  }
+
   void signOut() {
     FirebaseAuth.instance.signOut();
     Navigator.pushNamed(context, MyRoutes.loginPageRoute);
+  }
+
+  Future<void> getUserDisplayName() async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      String? displayName = user.displayName;
+      if (displayName != null && displayName.isNotEmpty) {
+        setState(() {
+          username = displayName;
+        });
+      }
+    }
   }
 
   @override
@@ -51,7 +73,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
               Text(
-                "User_Name",
+                username ?? "User_Name",
                 style: TextStyle(
                     color: const Color(0xFF7973FF),
                     fontSize: size.width * 0.09,
