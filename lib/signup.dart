@@ -22,16 +22,13 @@ class _SignupPageState extends State<SignupPage> {
         builder: (context) => const Center(child: CircularProgressIndicator()));
 
     try {
-      // await FirebaseAuth.instance
-      //     .createUserWithEmailAndPassword(email: email, password: password);
-
       UserCredential cred =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      cred.user!.updateDisplayName(name);
+      await cred.user!.updateDisplayName(name);
 
       Navigator.pushNamed(context, MyRoutes.homePageRoute);
     } on FirebaseAuthException catch (e) {

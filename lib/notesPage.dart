@@ -12,7 +12,6 @@ class NotesPage extends StatefulWidget {
 }
 
 class _NotesPageState extends State<NotesPage> {
-
   //Dont place them in the build method
   TextEditingController _titleController = TextEditingController();
   TextEditingController _contentController = TextEditingController();
@@ -55,15 +54,13 @@ class _NotesPageState extends State<NotesPage> {
                   controller: _titleController,
                   maxLines: 2,
                   decoration: InputDecoration(
-                      hintText: "Enter Title",
-                      hintStyle: TextStyle(
-                          color: const Color.fromARGB(255, 95, 94, 94),
-                          fontSize: size.width*0.05
-                          ),
-                      ),
-                  style: TextStyle(color: Colors.white,
-                  fontSize: size.width * 0.05
+                    hintText: "Enter Title",
+                    hintStyle: TextStyle(
+                        color: const Color.fromARGB(255, 95, 94, 94),
+                        fontSize: size.width * 0.05),
                   ),
+                  style: TextStyle(
+                      color: Colors.white, fontSize: size.width * 0.05),
                   onChanged: (value) {
                     // Save the entered text to the controller
                     _titleController.text = value;
@@ -74,12 +71,11 @@ class _NotesPageState extends State<NotesPage> {
                   controller: _contentController,
                   maxLines: 20,
                   decoration: const InputDecoration(
-                      hintText: "Enter Content",
-                      hintStyle: TextStyle(
-                        color: Color.fromARGB(255, 95, 94, 94)),
-                    ),
+                    hintText: "Enter Content",
+                    hintStyle:
+                        TextStyle(color: Color.fromARGB(255, 95, 94, 94)),
+                  ),
                   style: const TextStyle(color: Color(0xFFA9A9A9)),
-
                   onChanged: (value) {
                     _contentController.text = value;
                   },
@@ -102,9 +98,9 @@ class _NotesPageState extends State<NotesPage> {
                     },
                     style: ButtonStyle(
                         fixedSize: MaterialStateProperty.all(
-                            Size(size.width * 0.3, size.height * 0.02))),
+                            Size(size.width * 0.3, size.height * 0.04))),
                     child: Text(
-                      "Done",
+                      "Add",
                       style: TextStyle(fontSize: size.width * 0.04),
                     ),
                   ),

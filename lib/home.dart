@@ -1,3 +1,6 @@
+import 'dart:html';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gdsc_app_dev/notesDetailPage.dart';
@@ -13,12 +16,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String? username;
+  String? userId;
 
   @override
   void initState() {
     super.initState();
     // Initialize the user's name when the widget is created
-    getUserDisplayName();
+    getUserDetails();
   }
 
   void signOut() {
@@ -26,7 +30,7 @@ class _HomePageState extends State<HomePage> {
     Navigator.pushNamed(context, MyRoutes.loginPageRoute);
   }
 
-  Future<void> getUserDisplayName() async {
+  Future<void> getUserDetails() async {
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
@@ -35,6 +39,11 @@ class _HomePageState extends State<HomePage> {
         setState(() {
           username = displayName;
         });
+      }
+
+      String? uid = user.uid;
+      if (uid.isNotEmpty) {
+        userId = uid;
       }
     }
   }
@@ -104,65 +113,99 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
               Expanded(
-                child: ListView.builder(
-                    itemCount: Notes.getListSize(),
-                    itemBuilder: (context, index) {
-                      Notes currentNote = notesList[index];
-                      return Column(children: [
-                        SizedBox(
-                          height: size.height * 0.015,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    NotesDetailPage(initialNote: currentNote),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            height: size.height * 0.1,
-                            decoration: BoxDecoration(
-                                color: const Color(0xFF1E1E1E),
-                                borderRadius: BorderRadius.all(
-                                    Radius.circular(size.height * 0.03))),
-                            child: Padding(
-                              padding: EdgeInsets.all(size.height * 0.02),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "${notesList[index].getDate(notesList[index]).day}/${notesList[index].getDate(notesList[index]).month}/${notesList[index].getDate(notesList[index]).year}",
-                                    style: const TextStyle(color: Colors.white),
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('userNotes')
+                      .doc(userId)
+                      .collection('notes')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    }
+
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    }
+
+                    List<QueryDocumentSnapshot> notesList =
+                        snapshot.data?.docs ?? [];
+
+                    return ListView.builder(
+                      itemCount: notesList.length,
+                      itemBuilder: (context, index) {
+                        QueryDocumentSnapshot noteDocument = notesList[index];
+                        Notes currentNote = Notes(
+                          id: noteDocument['id'], // Include the document ID
+                          title: noteDocument['title'],
+                          content: noteDocument['content'],
+                          date: DateTime.parse(noteDocument['timestamp']),
+                        );
+
+                        return Column(
+                          children: [
+                            SizedBox(height: size.height * 0.015),
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => NotesDetailPage(
+                                      docId: noteDocument.id,
+                                    ),
                                   ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                );
+                              },
+                              child: Container(
+                                height: size.height * 0.1,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF1E1E1E),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(size.height * 0.03),
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(size.height * 0.02),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                          notesList[index]
-                                              .getTitle(notesList[index]),
-                                          style: TextStyle(
+                                        "${currentNote.getDate(currentNote).day}/${currentNote.getDate(currentNote).month}/${currentNote.getDate(currentNote).year}",
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            currentNote.getTitle(currentNote),
+                                            style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: size.width * 0.035)),
-                                      InkWell(
-                                          child: const Icon(Icons.delete,
-                                              color: Colors.white),
-                                          onTap: () => setState(() {
-                                                Notes.removeItem(
-                                                    notesList[index]);
-                                              }))
+                                              fontSize: size.width * 0.035,
+                                            ),
+                                          ),
+                                          InkWell(
+                                            child: const Icon(Icons.delete,
+                                                color: Colors.white),
+                                            onTap: () {
+                                              noteDocument.reference.delete();
+                                            },
+                                          ),
+                                        ],
+                                      ),
                                     ],
                                   ),
-                                ],
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                      ]);
-                    }),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
               Align(
                 alignment: Alignment.bottomRight,

@@ -31,11 +31,8 @@ class _LoginPageState extends State<LoginPage> {
         builder: (context) => const Center(child: CircularProgressIndicator()));
 
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          // email: _emailController.text.trim(),
-          // password: _passwordController.text.trim(),
-          email: email,
-          password: password);
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
       Navigator.pushNamed(context, MyRoutes.homePageRoute);
     } on FirebaseAuthException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(

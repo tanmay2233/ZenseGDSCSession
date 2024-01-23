@@ -1,11 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gdsc_app_dev/notes.dart';
 import 'package:gdsc_app_dev/routes.dart';
 
 class NotesDetailPage extends StatefulWidget {
-  final Notes initialNote;
+  final String docId;
 
-  NotesDetailPage({Key? key, required this.initialNote}) : super(key: key);
+  NotesDetailPage({Key? key, required this.docId}) : super(key: key);
 
   @override
   _NotesDetailPageState createState() => _NotesDetailPageState();
@@ -16,14 +18,64 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
   TextEditingController _titleController = TextEditingController();
   TextEditingController _contentController = TextEditingController();
   DateTime date = DateTime.now();
+  String? username;
+  String? userId;
+
+  Future<void> getUserDetails() async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      String? displayName = user.displayName;
+      if (displayName != null && displayName.isNotEmpty) {
+        setState(() {
+          username = displayName;
+        });
+      }
+
+      String? uid = user.uid;
+      if (uid.isNotEmpty) {
+        userId = uid;
+      }
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+    getUserDetails();
 
-    // Populate the controllers with initial values
-    _titleController.text = widget.initialNote.getTitle(widget.initialNote);
-    _contentController.text = widget.initialNote.getContent(widget.initialNote);
+    // Fetch and populate the controllers with data using the provided docId
+    fetchAndPopulateNoteData(widget.docId);
+  }
+
+  Future<void> fetchAndPopulateNoteData(String docId) async {
+    // Fetch the note using the provided docId
+    DocumentSnapshot noteDocument = await FirebaseFirestore.instance
+        .collection('userNotes')
+        .doc(userId)
+        .collection('notes')
+        .doc(docId)
+        .get();
+
+    // Populate the controllers with the fetched data
+    _titleController.text = noteDocument['title'];
+    _contentController.text = noteDocument['content'];
+  }
+
+  void updateNote() async {
+    // Update the note in Firestore
+    await FirebaseFirestore.instance
+        .collection('userNotes')
+        .doc(userId)
+        .collection('notes')
+        .doc(widget.docId)
+        .update({
+      'title': _titleController.text,
+      'content': _contentController.text,
+      // You can add other fields as needed
+    });
+
+    Navigator.pop(context); // Navigate back after updating
   }
 
   @override
@@ -60,9 +112,7 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                       )
                     ],
                   ),
-
                   SizedBox(height: size.height * 0.02),
-
                   TextFormField(
                     controller: _titleController,
                     maxLines: 3,
@@ -75,9 +125,7 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                                 BorderRadius.circular(size.width * 0.03))),
                     style: const TextStyle(color: Colors.white),
                   ),
-
                   SizedBox(height: size.height * 0.04),
-
                   TextFormField(
                     controller: _contentController,
                     maxLines: 20,
@@ -90,30 +138,21 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                                 BorderRadius.circular(size.width * 0.03))),
                     style: const TextStyle(color: Colors.white),
                   ),
-
                   SizedBox(height: size.height * 0.02),
-                  
                   Align(
                     alignment: Alignment.bottomRight,
                     child: ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          // Save changes back to the initialNote object
-                          widget.initialNote.updateNoteById(
-                            widget.initialNote.getid(widget.initialNote),
-                            _titleController.text,
-                            _contentController.text,
-                            date,
-                          );
-
-                          Navigator.pushNamed(context, MyRoutes.homePageRoute);
+                          // Save changes back to Firestore
+                          updateNote();
                         }
                       },
                       style: ButtonStyle(
                           fixedSize: MaterialStateProperty.all(
                               Size(size.width * 0.3, size.height * 0.02))),
                       child: Text(
-                        "Done",
+                        "Update",
                         style: TextStyle(fontSize: size.width * 0.04),
                       ),
                     ),
